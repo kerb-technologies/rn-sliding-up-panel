@@ -285,7 +285,7 @@ class SlidingUpPanel extends React.PureComponent {
 
   _onAnimatedValueChange({value}) {
     const isAtBottom = this._isAtBottom(value)
-    const isAtTop = this.isAtTop(value)
+    const isAtTop = this._isAtTop(value)
 
     if (isAtBottom) {
       this.props.onBottomReached()
