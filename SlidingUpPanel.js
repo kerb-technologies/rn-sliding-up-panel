@@ -81,6 +81,8 @@ class SlidingUpPanel extends React.PureComponent {
     backdropOpacity: 0.75,
     friction: Constants.DEFAULT_FRICTION,
     onBottomReached: () => null,
+    onTopReached: () => null,
+    onSnapReached: () => null,
     renderDraggableHeader: null
   }
 
@@ -283,10 +285,21 @@ class SlidingUpPanel extends React.PureComponent {
 
   _onAnimatedValueChange({value}) {
     const isAtBottom = this._isAtBottom(value)
+    const isAtTop = this.isAtTop(value)
 
     if (isAtBottom) {
       this.props.onBottomReached()
       this.props.avoidKeyboard && Keyboard.dismiss()
+    }
+
+    if (isAtTop) {
+      this.props.onTopReached()
+    }
+
+    const { snappingPoints = [] } = this.props;
+    const point = snappingPoints.indexOf(value);
+    if (point !== -1) {
+      this.props.onSnapReached(snappingPoints[point]);
     }
 
     if (this._backdrop == null) {
@@ -368,6 +381,11 @@ class SlidingUpPanel extends React.PureComponent {
   _isAtBottom(value) {
     const {bottom} = this.props.draggableRange
     return value <= bottom
+  }
+
+  _isAtTop(value) {
+    const {top} = this.props.draggableRange
+    return value >= top
   }
 
   _storeKeyboardPosition(value) {
