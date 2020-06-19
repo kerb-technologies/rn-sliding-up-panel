@@ -329,9 +329,12 @@ class SlidingUpPanel extends React.PureComponent {
     const node = TextInput.State.currentlyFocusedField()
 
     if (node != null) {
-      UIManager.viewIsDescendantOf(node, findNodeHandle(this._content), (isDescendant) => {
-        isDescendant && this.scrollIntoView(node)
-      });
+      const handle = findNodeHandle(this._content);
+      if (handle) {
+        UIManager.viewIsDescendantOf(node, handle, (isDescendant) => {
+          isDescendant && this.scrollIntoView(node)
+        });
+      }
     }
   }
 
